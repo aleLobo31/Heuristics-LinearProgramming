@@ -16,6 +16,8 @@ def read_input_file(path_input_file: str) -> dict:
         # Read input file
         with open(path_input_file, 'r') as f:
             lineas = f.readlines()
+            if(len(lineas) != 4):
+                raise ValueError("El archivo de entrada no tiene el formato correcto: <numero de franjas, n><numero de buses, m>\nk_d, k_p\n<d1, d2, ..., dm>\n<p1, p2, ..., pm>")
         
         # Extract: <n> <m>
         n, m = map(int, lineas[0].strip().split())
@@ -125,7 +127,7 @@ def generate_dat_file(data: dict, output_path: str):
         sys.exit(1)
 
 
-def solve(data_path: str, output_file_path: str="logs/output.txt"):
+def solve(data_path: str, output_file_path: str="logs/output_model_2_1.txt"):
     # Check if the model file exists
     if not os.path.exists(MODEL_PATH):
         print(f"Error: No se encontró el archivo modelo '{MODEL_PATH}'")
@@ -148,18 +150,21 @@ def solve(data_path: str, output_file_path: str="logs/output.txt"):
             check=True
         )
         
-        # Show output and errors if any
+        # Show output
         print(resultado.stdout)
+
+        # Show errors if any
         if resultado.stderr:
             print("Advertencias/Errores del solver:")
             print(resultado.stderr)
         
     except subprocess.CalledProcessError as e:
-        print(f"\n✗ Error al ejecutar GLPSOL:")
+        print(f"\nError al ejecutar GLPSOL:")
+        print(e.stdout)
         print(e.stderr)
         sys.exit(1)
     except FileNotFoundError:
-        print("\n✗ Error: No se encontró el comando 'glpsol'")
+        print("\nError: No se encontró el comando 'glpsol'")
         print("Asegúrate de que GLPK esté instalado y en el PATH")
         sys.exit(1)
 
@@ -174,17 +179,25 @@ def main():
         sys.exit(1)
     
     path_input_file = sys.argv[1]
+    # Check that input file has .in extension
+    if not path_input_file.endswith('.in'):
+        print("Error: El archivo de entrada debe tener extensión .in")
+        sys.exit(1)
+    
     path_output_file = sys.argv[2]
+    # Check that output file has .dat extension
+    if not path_output_file.endswith('.dat'):
+        print("Error: El archivo de salida debe tener extensión .dat")
+        sys.exit(1)
     
     # Reads input file
     data = read_input_file(path_input_file)
-    print(data)
 
     # Generates .dat file
     generate_dat_file(data, path_output_file)
     
     # Call the solver
-    # solve(path_output_file)
+    solve(path_output_file)
 
 if __name__ == "__main__":
     main()
