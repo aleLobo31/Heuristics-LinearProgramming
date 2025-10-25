@@ -1,0 +1,21 @@
+# Problema de asignación de buses a slots del taller
+
+data;
+
+set BUSES := Bus1 Bus2 Bus3;
+set SLOTS := Slot1 Slot2 Slot3 Slot4;
+
+param COSTE_ASIGNACION := 1.0;
+param COSTE_OPORTUNIDAD := 5.0;
+
+param DISTANCIAS :=
+    Bus1  10.0
+    Bus2  20.0
+    Bus3  30.0;
+
+param PASAJEROS :=
+    Bus1  30.0
+    Bus2  20.0
+    Bus3  10.0;
+
+end;

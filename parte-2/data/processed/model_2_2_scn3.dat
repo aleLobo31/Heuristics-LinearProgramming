@@ -1,0 +1,21 @@
+# Problema de asignación de buses a slots de diferentes talleres
+
+data;
+
+set BUSES := Bus1 Bus2 Bus3 Bus4 Bus5;
+set TALLERES := Taller1 Taller2 Taller3;
+set SLOTS := Slot1 Slot2 Slot3;
+
+param PASAJEROS_COMPARTIDOS: Bus1 Bus2 Bus3 Bus4 Bus5:=
+	Bus1 0 30 20 40 10
+	Bus2 30 0 25 15 35
+	Bus3 20 25 0 50 5
+	Bus4 40 15 50 0 45
+	Bus5 10 35 5 45 0;
+
+param DISPONIBILIDAD_SLOT: Taller1 Taller2 Taller3:=
+	Slot1 1 0 1
+	Slot2 0 1 1
+	Slot3 1 1 0;
+
+end;
